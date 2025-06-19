@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"elentok.com/dff/disk"
+	"github.com/olekukonko/tablewriter"
 )
 
 func main() {
@@ -13,9 +15,21 @@ func main() {
 		return
 	}
 
+	var data [][]string
 	for _, disk := range disks {
-		fmt.Printf("Device: %s\t%s free\n", disk.Mount, formatKBs(disk.AvailableKB))
+		row := []string{disk.Device, formatKBs(disk.AvailableKB)}
+		data = append(data, row)
 	}
+
+	table := tablewriter.NewWriter(os.Stdout)
+	header := []string{"Device", "Free"}
+	table.Header(header)
+	table.Bulk(data)
+	table.Render()
+	//
+	// for _, disk := range disks {
+	// 	fmt.Printf("Device: %s\t%s free\n", disk.Mount, formatKBs(disk.AvailableKB))
+	// }
 }
 
 func formatKBs(kbs float64) string {
