@@ -29,6 +29,7 @@ func main() {
 		{Text: "Mount", Color: color.Blue},
 		{Text: "Usage", Color: color.Blue},
 		{Text: "Free", Color: color.Blue},
+		{Text: "Size", Color: color.Blue},
 		{Text: "Device", Color: color.Blue},
 	}
 	for i, disk := range disks {
@@ -37,6 +38,7 @@ func main() {
 			{Text: disk.Mount, Color: color},
 			{Text: fmt.Sprintf("%d%%", int(disk.UsedPercentage)), AlignRight: true, Color: color},
 			{Text: formatKBs(disk.AvailableKB), AlignRight: true, Color: color},
+			{Text: formatKBs(disk.Size), AlignRight: true, Color: color},
 			{Text: disk.Device, Color: color},
 		}
 	}
