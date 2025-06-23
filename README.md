@@ -2,6 +2,8 @@
 
 Prettifier for the `df` (diskfree) command in Go.
 
+It highlights volumes with usage above 70% in yellow and above 90% in red.
+
 ![screenshot.png](screenshot.png)
 
 ## Installation
