@@ -5,8 +5,17 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
+)
+
+type Status int
+
+const (
+	Good Status = iota
+	Warning
+	Error
 )
 
 type Disk struct {
@@ -16,9 +25,10 @@ type Disk struct {
 	Size           float64 `json:"size"`
 	AvailableKB    float64 `json:"availableKB"`
 	Mount          string  `json:"mount"`
+	Status         Status  `json:"status"`
 }
 
-func LoadDisks() ([]Disk, error) {
+func LoadDisks(excludePatterns ...regexp.Regexp) ([]Disk, error) {
 	// Use -kP to ensure POSIX format and sizes in kilobytes
 	cmd := exec.Command("df", "-kP")
 	var out bytes.Buffer
@@ -45,7 +55,9 @@ func LoadDisks() ([]Disk, error) {
 		if err != nil {
 			fmt.Printf("Error parsing line: '%s': %s", line, err)
 		} else {
-			disks = append(disks, disk)
+			if isRelevant(disk, excludePatterns) {
+				disks = append(disks, disk)
+			}
 		}
 	}
 
@@ -54,6 +66,16 @@ func LoadDisks() ([]Disk, error) {
 	}
 
 	return disks, nil
+}
+
+func isRelevant(disk Disk, excludePatterns []regexp.Regexp) bool {
+	for _, pattern := range excludePatterns {
+		if pattern.MatchString(disk.Mount) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func parseLine(line string) (Disk, error) {
@@ -69,6 +91,13 @@ func parseLine(line string) (Disk, error) {
 	usedPercentStr := strings.TrimRight(fields[4], "%")
 	usedPercent, _ := strconv.ParseFloat(usedPercentStr, 64)
 
+	status := Good
+	if usedPercent > 90 {
+		status = Error
+	} else if usedPercent > 70 {
+		status = Warning
+	}
+
 	disk := Disk{
 		Device:         fields[0],
 		Used:           usedKB,
@@ -76,6 +105,7 @@ func parseLine(line string) (Disk, error) {
 		Size:           sizeKB,
 		AvailableKB:    availKB,
 		Mount:          fields[5],
+		Status:         status,
 	}
 
 	return disk, nil

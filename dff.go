@@ -2,34 +2,46 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"regexp"
 
+	"elentok.com/dff/color"
 	"elentok.com/dff/disk"
-	"github.com/olekukonko/tablewriter"
+	"elentok.com/dff/table"
 )
 
+var statusToColor = map[disk.Status]color.Color{
+	disk.Good:    color.Green,
+	disk.Warning: color.Yellow,
+	disk.Error:   color.Red,
+}
+
+var excludePattern = regexp.MustCompile("^/(System/Volumes|snap)")
+
 func main() {
-	disks, err := disk.LoadDisks()
+	disks, err := disk.LoadDisks(*excludePattern)
 	if err != nil {
 		fmt.Println("Failed getting disks: ", err)
 		return
 	}
 
-	var data [][]string
-	for _, disk := range disks {
-		row := []string{disk.Device, formatKBs(disk.AvailableKB)}
-		data = append(data, row)
+	data := make([][]table.Cell, len(disks)+1)
+	data[0] = []table.Cell{
+		{Text: "Mount", Color: color.Blue},
+		{Text: "Usage", Color: color.Blue},
+		{Text: "Free", Color: color.Blue},
+		{Text: "Device", Color: color.Blue},
+	}
+	for i, disk := range disks {
+		color := statusToColor[disk.Status]
+		data[i+1] = []table.Cell{
+			{Text: disk.Mount, Color: color},
+			{Text: fmt.Sprintf("%d%%", int(disk.UsedPercentage)), AlignRight: true, Color: color},
+			{Text: formatKBs(disk.AvailableKB), AlignRight: true, Color: color},
+			{Text: disk.Device, Color: color},
+		}
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
-	header := []string{"Device", "Free"}
-	table.Header(header)
-	table.Bulk(data)
-	table.Render()
-	//
-	// for _, disk := range disks {
-	// 	fmt.Printf("Device: %s\t%s free\n", disk.Mount, formatKBs(disk.AvailableKB))
-	// }
+	table.PrintTable(data)
 }
 
 func formatKBs(kbs float64) string {
