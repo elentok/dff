@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"regexp"
 
-	"elentok.com/dff/color"
-	"elentok.com/dff/disk"
-	"elentok.com/dff/table"
+	"github.com/elentok/dff/color"
+	"github.com/elentok/dff/disk"
+	"github.com/elentok/dff/table"
 )
 
 var statusToColor = map[disk.Status]color.Color{

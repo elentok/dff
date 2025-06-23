@@ -3,7 +3,7 @@ package table
 import (
 	"fmt"
 
-	"elentok.com/dff/color"
+	"github.com/elentok/dff/color"
 )
 
 type Cell struct {
