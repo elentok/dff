@@ -242,7 +242,7 @@ homebrew_casks:
       # Repository name.
       #
       # Templates: allowed.
-      name: homebrew-dff
+      name: homebrew-stuff
 
       # Optionally a branch can be provided.
       #
