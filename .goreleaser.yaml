@@ -255,6 +255,7 @@ homebrew_casks:
       #
       # Templates: allowed.
       # token: "{{ .Env.GITHUB_PERSONAL_AUTH_TOKEN }}"
+      token: "{{ .Env.GORELEASER_HOMEBREW_GITHUB_TOKEN }}"
 
       # Optionally specify if this is a token from another SCM, allowing to
       # cross-publish.
