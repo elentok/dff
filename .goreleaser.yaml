@@ -51,3 +51,294 @@ release:
     ---
 
     Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
+homebrew_casks:
+  -
+    # Name of the cask
+    #
+    # Default: the project name.
+    # Templates: allowed.
+    name: dff
+
+    # Binary name inside the cask
+    #
+    # Default: the cask name.
+    # Templates: allowed.
+    binary: dff
+
+    # Path to the manpage files.
+    #
+    # Templates: allowed.
+    # manpages:
+    #   - man/myapp.1
+    #   - man/myapp-subcmd.1
+
+    # Completions for different shells
+    #
+    # Templates: allowed.
+    # completions:
+    #   bash: completions/myapp.bash
+    #   zsh: completions/myapp.zsh
+    #   fish: completions/myapp.fish
+
+    # This information will be used to build the URL section of your Cask.
+    #
+    # You can set the template, as well as additional parameters.
+    # These parameters can be used to provide extra headers, cookies, or other
+    # download requirements for your application.
+    # See https://docs.brew.sh/Cask-Cookbook#additional-url-parameters for more details.
+    #
+    # All fields are optional.
+    url:
+      # URL which is determined by the given Token (github, gitlab or gitea).
+      #
+      # Default depends on the client.
+      # Templates: allowed.
+      template: "https://github.com/elentok/dff/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+
+      # Used when the domains of `url` and `homepage` differ.
+      # Templates: allowed.
+      # verified: "github.com/elentok/dff/"
+
+      # Download strategy or format specification
+      # See official Cask Cookbook for allowed values.
+      # Templates: allowed.
+      using: ":homebrew_curl"
+
+      # HTTP cookies to send with the download request
+      # Templates: allowed.
+      cookies:
+        license: "accept-backup"
+
+      # HTTP referer header
+      # Templates: allowed.
+      # referer: "https://example.com/download-page"
+
+      # Additional HTTP headers
+      # Templates: allowed.
+      headers:
+        - "X-Version: {{ .Version }}"
+
+      # Custom User-Agent header
+      # Templates: allowed.
+      user_agent: "MyApp/1.0 (macOS)"
+
+      # Custom body when using POST request
+      # Templates: allowed.
+      data:
+        format: "dmg"
+        platform: "mac"
+
+    # The project name and current git tag are used in the format string.
+    #
+    # Templates: allowed.
+    commit_msg_template: "Brew cask update for {{ .ProjectName }} version {{ .Tag }}"
+
+    # Directory inside the repository to put the cask.
+    # Default: Casks
+    directory: Casks
+
+    # Caveats for the user of your binary.
+    # caveats: "How to use this binary"
+
+    # Your app's homepage.
+    #
+    # Default: inferred from global metadata.
+    homepage: "https://github.com/elentok/dff/"
+
+    # Your app's description.
+    #
+    # Templates: allowed.
+    # Default: inferred from global metadata.
+    description: "Prettifier for the `df` (diskfree) command in Go."
+
+    # Setting this will prevent goreleaser to actually try to commit the updated
+    # cask - instead, the cask file will be stored on the dist directory
+    # only, leaving the responsibility of publishing it to the user.
+    # If set to auto, the release will not be uploaded to the homebrew tap
+    # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
+    #
+    # Templates: allowed.
+    # skip_upload: true
+    skip_upload: auto
+
+    # Custom block for brew.
+    # Can be used to specify alternate downloads for devel or head releases.
+    #
+    # This block is placed at the top of the cask definition.
+    # It allows you to define custom modules and helper methods
+    # for advanced tasks, such as dynamic URL construction.
+    # For more information, see: https://docs.brew.sh/Cask-Cookbook#arbitrary-ruby-methods
+    # custom_block: |
+    #   head "https://github.com/some/package.git"
+    #   ...
+
+    # Dependencies for the cask.
+    # dependencies:
+    #   - cask: some-cask
+    #   - formula: some-formula
+
+    # Packages that conflict with your cask.
+    # conflicts:
+    #   - cask: some-cask
+    #   - formula: some-formula
+
+    # Hooks for the cask lifecycle.
+    # hooks:
+    #   pre:
+    #     install: |
+    #       system_command "/usr/bin/defaults", args: ["write", "com.example.app", "key", "value"]
+    #     uninstall: |
+    #       system_command "/usr/bin/defaults", args: ["delete", "com.example.app"]
+    #   post:
+    #     install: |
+    #       system_command "/usr/bin/open", args: ["#{appdir}/MyApp.app"]
+    #     uninstall: |
+    #       system_command "/usr/bin/rm", args: ["-rf", "~/.myapp"]
+
+    # Relative path to a Service that should be moved into the
+    # ~/Library/Services folder on installation.
+    # service: "myapp.service"
+
+    # Additional procedures for a more complete uninstall, including user files
+    # and shared resources.
+    # zap:
+    #   launchctl:
+    #     - "my.fancy.package.service"
+    #   quit:
+    #     - "my.fancy.package"
+    #   login_item:
+    #     - "my.fancy.package"
+    #   trash:
+    #     - "~/.foo/bar"
+    #     - "~/otherfile"
+    #   delete:
+    #     - "~/.foo/bar"
+    #     - "~/otherfile"
+
+    # Procedures to uninstall a cask.
+    # Optional unless a pkg or installer artifact stanza is used.
+    # uninstall:
+    #   launchctl:
+    #     - "my.fancy.package.service"
+    #   quit:
+    #     - "my.fancy.package"
+    #   login_item:
+    #     - "my.fancy.package"
+    #   trash:
+    #     - "~/.foo/bar"
+    #     - "~/otherfile"
+    #   delete:
+    #     - "~/.foo/bar"
+    #     - "~/otherfile"
+
+    # Repository to push the generated files to.
+    repository:
+      # Repository owner.
+      #
+      # Templates: allowed.
+      owner: elentok
+
+      # Repository name.
+      #
+      # Templates: allowed.
+      name: homebrew-dff
+
+      # Optionally a branch can be provided.
+      #
+      # Default: default repository branch.
+      # Templates: allowed.
+      # branch: main
+
+      # Optionally a token can be provided, if it differs from the token
+      # provided to GoReleaser
+      #
+      # Templates: allowed.
+      # token: "{{ .Env.GITHUB_PERSONAL_AUTH_TOKEN }}"
+
+      # Optionally specify if this is a token from another SCM, allowing to
+      # cross-publish.
+      #
+      # Only taken into account if `token` is set.
+      #
+      # Valid options:
+      # - 'github'
+      # - 'gitlab'
+      # - 'gitea'
+      #
+      # This feature is only available in GoReleaser Pro.
+      # token_type: "github"
+
+      # Sets up pull request creation instead of just pushing to the given branch.
+      # Make sure the 'branch' property is different from base before enabling
+      # it.
+      #
+      # This might require a personal access token.
+      # pull_request:
+      #   # Whether to enable it or not.
+      #   enabled: true
+      #
+      #   # Whether to open the PR as a draft or not.
+      #   draft: true
+      #
+      #   # If the pull request template has checkboxes, enabling this will
+      #   # check all of them.
+      #   #
+      #   # This feature is only available in GoReleaser Pro, and when the pull
+      #   # request is being opened on GitHub.
+      #   check_boxes: true
+      #
+      #   # Allows to set a body for the pull request.
+      #   # If the repository has a pull request template, it will be appended to
+      #   # this.
+      #   #
+      #   # Since: v2.12 (unreleased)
+      #   body: |
+      #     cc/ @foobar
+      #
+      #   # Base can also be another repository, in which case the owner and name
+      #   # above will be used as HEAD, allowing cross-repository pull requests.
+      #   base:
+      #     owner: goreleaser
+      #     name: my-repo
+      #     branch: main
+
+    # Git author used to commit to the repository.
+    #
+    # Since: v2.11
+    # Default: inferred from global metadata (Since v2.12-unreleased).
+    commit_author:
+      # Git author name.
+      #
+      # Templates: allowed.
+      name: goreleaserbot
+
+      # Git author email.
+      #
+      # Templates: allowed.
+      email: bot@goreleaser.com
+
+      # Git commit signing configuration.
+      # Only useful if repository is of type 'git'.
+      #
+      # Since: v2.11.
+      # signing:
+      #   # Enable commit signing.
+      #   enabled: true
+      #
+      #   # The signing key to use.
+      #   # Can be a key ID, fingerprint, email address, or path to a key file.
+      #   #
+      #   # Templates: allowed.
+      #   key: "{{ .Env.GPG_SIGNING_KEY }}"
+      #
+      #   # The GPG program to use for signing.
+      #   #
+      #   # Templates: allowed.
+      #   program: gpg2
+      #
+      #   # The signature format to use.
+      #   #
+      #   # Valid options: openpgp, x509, ssh.
+      #   # Default: openpgp.
+      #   format: openpgp
