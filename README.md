@@ -8,7 +8,16 @@ It highlights volumes with usage above 70% in yellow and above 90% in red.
 
 ## Installation
 
-```sh
+Using homebrew:
+
+```bash
+brew tap elentok/stuff
+brew install dff
+```
+
+Using `go install`:
+
+```bash
 go install github.com/elentok/dff@latest
 ```
 
