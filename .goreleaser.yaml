@@ -184,6 +184,13 @@ homebrew_casks:
     #   - formula: some-formula
 
     # Hooks for the cask lifecycle.
+    hooks:
+      post:
+        # replace foo with the actual binary name
+        install: |
+          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/dff"]
+          end
     # hooks:
     #   pre:
     #     install: |
