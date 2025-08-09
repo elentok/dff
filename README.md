@@ -27,4 +27,4 @@ Just run `dff` (it should be in `"$(go env GOPATH)/bin"`)
 
 ## Changelog
 
-- **v0.1.0** - Use [lipgloss](https://github.com/charmbracelet/lipgloss) for rendering.
+- **v0.1.1** - Use [lipgloss](https://github.com/charmbracelet/lipgloss) for rendering.
