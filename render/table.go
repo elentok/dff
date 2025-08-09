@@ -2,9 +2,13 @@ package render
 
 import (
 	"fmt"
+	"os"
+	"strings"
+	"unicode/utf8"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
+	"github.com/charmbracelet/x/term"
 	"github.com/elentok/dff/disk"
 )
 
@@ -54,7 +58,20 @@ func RenderTable(disks []disk.Disk) {
 		t.Row(d.Mount, usage, free, size, d.Device)
 	}
 
-	fmt.Println(t)
+	printWithMaxWidth(t)
+}
+
+func printWithMaxWidth(t *table.Table) {
+	termWidth, _, _ := term.GetSize(os.Stdin.Fd())
+
+	tString := t.String()
+	lines := strings.SplitN(tString, "\n", 2)
+
+	if utf8.RuneCountInString(lines[0]) < termWidth {
+		fmt.Println(tString)
+	} else {
+		fmt.Println(t.Width(termWidth))
+	}
 }
 
 func formatKBs(kbs float64) string {
