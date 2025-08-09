@@ -24,3 +24,7 @@ go install github.com/elentok/dff@latest
 ## Usage
 
 Just run `dff` (it should be in `"$(go env GOPATH)/bin"`)
+
+## Changelog
+
+- **v0.1.0** - Use [lipgloss](https://github.com/charmbracelet/lipgloss) for rendering.
